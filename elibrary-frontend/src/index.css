@@ -1,0 +1,203 @@
+/* src/index.css */
+/* ---------------------------------------------------------------------------
+ Global styles for the E-Library frontend.
+--------------------------------------------------------------------------- */
+
+/* Theme variables */
+:root {
+  --primary: #4f46e5;         /* Indigo */
+  --primary-dark: #4338ca;    /* Darker indigo */
+  --bg: #f3f4f6;              /* Page background */
+  --card: #ffffff;            /* Card background */
+  --text: #1f2937;            /* Primary text */
+  --muted: #6b7280;           /* Secondary text */
+  --danger: #ef4444;          /* Delete color */
+  --danger-bg: #fee2e2;       /* Error background */
+  --border: #e5e7eb;          /* Border colour */
+}
+
+body {
+  margin: 0;                                          /* Reset */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);                              /* Page bg */
+  color: var(--text);                                 /* Text */
+}
+
+/* ---- Navbar ---- */
+.navbar {
+  display: flex;                                      /* Flex layout */
+  justify-content: space-between;                     /* Ends apart */
+  align-items: center;                                /* Vertical centre */
+  padding: 1rem 2rem;                                 /* Breathing room */
+  background: var(--card);                            /* Card bg */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);             /* Subtle shadow */
+}
+.nav-brand a { font-weight: 700; font-size: 1.25rem; color: var(--primary); text-decoration: none; }
+.nav-links { display: flex; gap: 1rem; align-items: center; }
+.nav-links a { color: var(--text); text-decoration: none; font-weight: 500; }
+.nav-links a:hover { color: var(--primary); }
+.nav-user { color: var(--muted); font-size: 0.9rem; }
+
+/* ---- Layout ---- */
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.app-main { flex-grow: 1; }
+.app-footer { padding: 1rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+
+/* ---- Page container ---- */
+.page-container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+.page-container.center { text-align: center; padding: 4rem 1rem; }
+
+/* ---- Buttons ---- */
+button { font: inherit; cursor: pointer; }
+.btn-primary {
+  background: var(--primary); color: white; border: none; border-radius: 6px;
+  padding: 0.7rem 1.2rem; font-weight: 600; transition: background 0.2s;
+}
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+.btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
+.btn-logout {
+  background: transparent; border: 1px solid var(--danger); color: var(--danger);
+  border-radius: 6px; padding: 0.4rem 0.9rem;
+}
+.btn-delete {
+  background: transparent; color: var(--danger);
+  border: 1px solid var(--danger); border-radius: 4px; padding: 0.3rem 0.7rem;
+}
+.btn-edit {
+  background: transparent; color: var(--primary);
+  border: 1px solid var(--primary); border-radius: 4px; padding: 0.3rem 0.7rem;
+  margin-right: 0.4rem;
+}
+.btn-cancel {
+  background: transparent; border: 1px solid var(--muted); color: var(--muted);
+  border-radius: 6px; padding: 0.6rem 1rem;
+}
+
+/* ---- Auth pages ---- */
+.auth-container {
+  display: flex; justify-content: center; align-items: center; min-height: 100vh;
+}
+.auth-card {
+  background: var(--card); padding: 2rem; border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.08); width: 100%; max-width: 420px;
+}
+.auth-card h2 { text-align: center; margin-top: 0; }
+.auth-alt { text-align: center; margin-top: 1rem; color: var(--muted); }
+.form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.form-group label { font-weight: 600; margin-bottom: 0.4rem; }
+.form-group input, .form-group textarea, .form-group select {
+  padding: 0.7rem; border: 1px solid var(--border); border-radius: 6px; font: inherit;
+}
+
+/* ---- Error banner ---- */
+.error-banner {
+  background: var(--danger-bg); color: var(--danger); padding: 0.7rem 1rem;
+  border-radius: 6px; margin-bottom: 1rem; display: flex;
+  justify-content: space-between; align-items: center;
+}
+.error-close { background: transparent; border: none; color: var(--danger); font-size: 1.1rem; }
+
+/* ---- Spinner ---- */
+.spinner-wrap { display: flex; flex-direction: column; align-items: center; padding: 2rem; color: var(--muted); }
+.spinner {
+  width: 32px; height: 32px; border: 3px solid var(--border);
+  border-top-color: var(--primary); border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- Filters ---- */
+.filters-bar {
+  display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+}
+.filters-bar input, .filters-bar select, .filters-bar button {
+  padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; font: inherit;
+}
+.btn-direction { background: white; border: 1px solid var(--border); }
+
+/* ---- Books grid ---- */
+.books-grid {
+  display: grid; gap: 1.5rem; margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.book-card {
+  background: var(--card); border-radius: 10px; overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06); transition: transform 0.15s;
+}
+.book-card:hover { transform: translateY(-3px); }
+.book-cover { height: 240px; background: #eee; display: flex; align-items: center; justify-content: center; }
+.book-cover img { width: 100%; height: 100%; object-fit: cover; }
+.book-cover-placeholder {
+  font-size: 3rem; font-weight: 700; color: var(--primary); background: #eef2ff; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.book-cover-placeholder.large { font-size: 5rem; }
+.book-info { padding: 1rem; }
+.book-title { margin: 0 0 0.3rem; font-size: 1.05rem; }
+.book-title a { color: var(--text); text-decoration: none; }
+.book-category { color: var(--muted); font-size: 0.85rem; margin: 0.2rem 0; }
+.book-authors { color: var(--muted); font-size: 0.85rem; margin: 0.2rem 0 0.6rem; }
+.book-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+.book-price { font-weight: 700; color: var(--primary); }
+.book-rating { color: #b45309; }
+
+/* ---- Book detail ---- */
+.book-detail { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; margin-bottom: 2rem; }
+.book-detail-cover { background: #eee; border-radius: 12px; overflow: hidden; min-height: 360px; }
+.book-detail-cover img { width: 100%; height: 100%; object-fit: cover; }
+.book-detail-info h1 { margin-top: 0; }
+.book-detail-authors, .book-detail-category { color: var(--muted); }
+.book-detail-price { font-size: 1.5rem; color: var(--primary); font-weight: 700; }
+.book-detail-desc { margin-top: 1rem; line-height: 1.5; }
+
+/* ---- Reviews ---- */
+.reviews-section { margin-top: 2rem; }
+.review-form { background: var(--card); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; }
+.review-list { list-style: none; padding: 0; margin: 0; }
+.review-item {
+  background: var(--card); padding: 1rem 1.25rem; border-radius: 10px;
+  margin-bottom: 0.75rem; position: relative;
+}
+.review-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+.review-rating { color: #b45309; font-weight: 600; }
+.review-body { margin: 0.4rem 0; line-height: 1.4; }
+.review-meta { color: var(--muted); font-size: 0.8rem; }
+.review-item .btn-delete { position: absolute; top: 1rem; right: 1rem; }
+
+/* ---- Pagination ---- */
+.pagination { display: flex; justify-content: center; gap: 0.3rem; margin: 2rem 0; flex-wrap: wrap; }
+.page-btn {
+  border: 1px solid var(--border); background: white; padding: 0.4rem 0.8rem;
+  border-radius: 6px; cursor: pointer;
+}
+.page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+.page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.page-ellipsis { padding: 0.4rem; color: var(--muted); }
+
+/* ---- Admin tables ---- */
+.admin-form {
+  background: var(--card); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;
+}
+.admin-form-grid {
+  display: grid; gap: 0.75rem; margin-bottom: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.admin-form-grid input, .admin-form-grid select, .admin-form-grid textarea {
+  padding: 0.6rem; border: 1px solid var(--border); border-radius: 6px; font: inherit;
+}
+.admin-form-grid textarea { grid-column: 1 / -1; min-height: 70px; }
+.admin-form-grid select[multiple] { min-height: 100px; }
+.admin-form-actions { display: flex; gap: 0.6rem; }
+.admin-search { padding: 0.6rem; width: 100%; max-width: 400px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 1rem; }
+.admin-table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 10px; overflow: hidden; }
+.admin-table th, .admin-table td { padding: 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+.admin-table th { background: #f9fafb; font-weight: 600; }
+
+/* ---- Empty state ---- */
+.empty-state { text-align: center; color: var(--muted); padding: 3rem 0; }
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .book-detail { grid-template-columns: 1fr; }
+  .nav-links { flex-wrap: wrap; gap: 0.5rem; }
+}

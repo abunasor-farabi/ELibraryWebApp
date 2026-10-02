@@ -134,7 +134,15 @@ const reviewsSlice = createSlice({
         const bucket = s.byBookId[bookId]; // Find bucket
         if (!bucket) return; // Shouldn't happen
         const idx = bucket.items.findIndex((r) => r.id === tempId); // Find placeholder
-        if (idx !== -1) bucket.items[idx] = real; // Swap to real
+        if (idx === -1) return; // Swap to real
+        // Merge server fields over the optimistic entry, but keep the local
+        // userName/userId if the server's POST DTO omits them.
+        bucket.items[idx] = {
+          ...bucket.items[idx],
+          ...real,
+          userName: real.userName ?? bucket.items[idx].userName,
+          userId: real.userId ?? bucket.items[idx].userId,
+        };
       })
       .addCase(createReview.rejected, (s, a) => {
         const { bookId, tempId, message } = a.payload || {}; // Extract

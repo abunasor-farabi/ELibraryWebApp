@@ -163,10 +163,10 @@ export default function BookDetailPage() {
               <small className="review-meta">
                 by {r.userName || "Anonymous"} on {new Date(r.createdOn).toLocaleDateString()}
               </small>
-
+              <br />
               {/* Delete button for owner or Admin */}
               {user && (user.userName === r.userName || roles.includes("Admin")) && (
-                <button className="btn-delete" onClick={() => handleDelete(r)}>
+                <button style={{color:"red"}} onClick={() => handleDelete(r)}>
                   Delete
                 </button>
               )}

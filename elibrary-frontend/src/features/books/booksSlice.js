@@ -107,6 +107,10 @@ const booksSlice = createSlice({
   name: "books",
   initialState,
   reducers: {
+    setBookSearch: (s, a) => {
+            s.filters.search = a.payload;   // New search
+            s.pageNumber = 1;   // Reset to page 1
+    },
     // Update one filter value (from the UI).
     setFilter: (state, action) => {
       const { key, value } = action.payload; // e.g. { key:"search", value:"dune" }
@@ -209,6 +213,6 @@ const booksSlice = createSlice({
   },
 });
 
-export const { setFilter, setPage, clearBooksError, clearCurrentBook } =
+export const { setBookSearch, setFilter, setPage, clearBooksError, clearCurrentBook } =
   booksSlice.actions; // Export actions
 export default booksSlice.reducer; // Export reducer

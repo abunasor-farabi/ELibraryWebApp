@@ -36,7 +36,7 @@ const emptyForm = {
 export default function AdminBooksPage() {
   const dispatch = useDispatch(); // Dispatch
 
-  const { items, isLoading, error, pageNumber, totalPages } = useSelector(
+  const { items, isLoading, error, pageNumber, totalPages, filters: { search }, } = useSelector(
     (s) => s.books,
   ); // Books state
   const { items: categories } = useSelector((s) => s.categories); // Categories
@@ -44,7 +44,7 @@ export default function AdminBooksPage() {
 
   const [form, setForm] = useState(emptyForm); // Form state
   const [editingId, setEditingId] = useState(null); // null = creating
-  const [searchInput, setSearchInput] = useState(""); // Local search
+  const [searchInput, setSearchInput] = useState(search); // Local search
   const debounced = useDebounce(searchInput, 400); // Debounced search
 
   // Load dependencies + books on mount.
@@ -61,7 +61,7 @@ export default function AdminBooksPage() {
   // Re-fetch books whenever page changes (or search above).
   useEffect(() => {
     dispatch(fetchBooks()); // Fetch page
-  }, [dispatch, pageNumber]);
+  }, [dispatch, pageNumber, search]);
 
   // Set field helper.
   const setField = (key, value) => setForm((f) => ({ ...f, [key]: value })); // Merge field
@@ -125,7 +125,7 @@ export default function AdminBooksPage() {
         className="admin-search"
         type="search"
         placeholder="Search books..."
-        value={searchInput}
+        value={searchInput || ''}
         onChange={(e) => setSearchInput(e.target.value)}
       />
 

@@ -41,4 +41,4 @@ export const updateBookRequest = (id, payload) =>
 
 // DELETE /book/:id - Admin only
 export const deleteBookRequest = (id) =>
-    apiClient(`/book/${id}`, { method: "DElETE" }); // Delete
+    apiClient(`/book/${id}`, { method: "DELETE" }); // Delete

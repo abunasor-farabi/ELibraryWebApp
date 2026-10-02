@@ -18,46 +18,50 @@ import Spinner from "../components/Spinner";
 import ErrorBanner from "../components/ErrorBanner";
 
 export default function BookDetailPage() {
-  const { id } = useParams();                             // Book id from URL
-  const bookId = Number(id);                              // Cast to number
-  const dispatch = useDispatch();                         // Dispatch
+  const { id } = useParams(); // Book id from URL
+  const bookId = Number(id); // Cast to number
+  const dispatch = useDispatch(); // Dispatch
 
-  const { current: book, isLoading: bookLoading, error: bookError } =
-    useSelector((s) => s.books);                          // Book state
+  const {
+    current: book,
+    isLoading: bookLoading,
+    error: bookError,
+  } = useSelector((s) => s.books); // Book state
 
   const reviewBucket = useSelector((s) => s.reviews.byBookId[bookId]); // Reviews for book
-  const { isLoading: reviewsLoading, error: reviewsError } =
-    useSelector((s) => s.reviews);                        // Reviews meta
+  const { isLoading: reviewsLoading, error: reviewsError } = useSelector(
+    (s) => s.reviews,
+  ); // Reviews meta
 
-  const { user } = useSelector((s) => s.auth);            // Current user
-  const { roles } = useSelector((s) => s.auth);           // Roles
+  const { user } = useSelector((s) => s.auth); // Current user
+  const { roles } = useSelector((s) => s.auth); // Roles
 
   // Review form state.
   const [form, setForm] = useState({ title: "", content: "", rating: 5 }); // Form fields
 
   // Fetch book + reviews when id changes.
   useEffect(() => {
-    dispatch(fetchBookById(bookId));                       // Load book
+    dispatch(fetchBookById(bookId)); // Load book
     dispatch(fetchReviewsByBook({ bookId, pageNumber: 1, pageSize: 10 })); // Load reviews
 
     // Clean up book when we leave this page.
-    return () => dispatch(clearCurrentBook());             // Reset
+    return () => dispatch(clearCurrentBook()); // Reset
   }, [dispatch, bookId]);
 
   // Submit a review using an optimistic insert.
   const handleSubmit = async (e) => {
-    e.preventDefault();                                    // No reload
+    e.preventDefault(); // No reload
 
-    const tempId = `temp-${Date.now()}`;                   // Unique placeholder id
+    const tempId = `temp-${Date.now()}`; // Unique placeholder id
     const optimisticReview = {
-      id: tempId,                                          // Placeholder id
-      title: form.title,                                   // Title
-      content: form.content,                               // Body
-      rating: form.rating,                                 // Rating
-      createdOn: new Date().toISOString(),                 // Now
-      updatedOn: null,                                     // Not yet updated
-      bookId,                                              // Book FK
-      userName: user?.userName || "You",                   // Reviewer name
+      id: tempId, // Placeholder id
+      title: form.title, // Title
+      content: form.content, // Body
+      rating: form.rating, // Rating
+      createdOn: new Date().toISOString(), // Now
+      updatedOn: null, // Not yet updated
+      bookId, // Book FK
+      userName: user?.userName || "You", // Reviewer name             
     };
 
     // 1) Optimistic insert into redux.
@@ -80,13 +84,17 @@ export default function BookDetailPage() {
   };
 
   if (bookLoading) return <Spinner label="Loading book..." />; // Spinner
-  if (!book) return <p className="empty-state">{bookError || "Book not found"}</p>; // Empty
+  if (!book)
+    return <p className="empty-state">{bookError || "Book not found"}</p>; // Empty
 
   const canReview = !!user; // Only logged-in users can post
 
   return (
     <div className="page-container">
-      <ErrorBanner message={bookError} onClose={() => dispatch(clearCurrentBook())} />
+      <ErrorBanner
+        message={bookError}
+        onClose={() => dispatch(clearCurrentBook())}
+      />
 
       <div className="book-detail">
         <div className="book-detail-cover">
@@ -99,21 +107,31 @@ export default function BookDetailPage() {
 
         <div className="book-detail-info">
           <h1>{book.title}</h1>
-          <p className="book-detail-authors">by {book.authorNames?.join(", ") || "Unknown"}</p>
-          <p className="book-detail-category">Category: {book.categoryName || "—"}</p>
+          <p className="book-detail-authors">
+            by {book.authorNames?.join(", ") || "Unknown"}
+          </p>
+          <p className="book-detail-category">
+            Category: {book.categoryName || "—"}
+          </p>
           <p className="book-detail-price">${book.price.toFixed(2)}</p>
           <p className="book-detail-stock">In stock: {book.stockQuantity}</p>
           <p className="book-detail-rating">
-            ★ {book.averageRating?.toFixed(1) || "0.0"} ({book.reviewCount} reviews)
+            ★ {book.averageRating?.toFixed(1) || "0.0"} ({book.reviewCount}{" "}
+            reviews)
           </p>
-          <p className="book-detail-desc">{book.description || "No description."}</p>
+          <p className="book-detail-desc">
+            {book.description || "No description."}
+          </p>
         </div>
       </div>
 
       <section className="reviews-section">
         <h2>Reviews</h2>
 
-        <ErrorBanner message={reviewsError} onClose={() => dispatch(clearReviewsError())} />
+        <ErrorBanner
+          message={reviewsError}
+          onClose={() => dispatch(clearReviewsError())}
+        />
 
         {/* Post a review */}
         {canReview && (
@@ -123,7 +141,9 @@ export default function BookDetailPage() {
               <input
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
-                required minLength={5} maxLength={150}
+                required
+                minLength={5}
+                maxLength={150}
               />
             </div>
 
@@ -132,16 +152,22 @@ export default function BookDetailPage() {
               <textarea
                 value={form.content}
                 onChange={(e) => setForm({ ...form, content: e.target.value })}
-                required minLength={5} maxLength={2000}
+                required
+                minLength={5}
+                maxLength={2000}
               />
             </div>
 
             <div className="form-group">
               <label>Rating (1-5)</label>
               <input
-                type="number" min={1} max={5}
+                type="number"
+                min={1}
+                max={5}
                 value={form.rating}
-                onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
+                onChange={(e) =>
+                  setForm({ ...form, rating: Number(e.target.value) })
+                }
                 required
               />
             </div>
@@ -161,22 +187,22 @@ export default function BookDetailPage() {
               </div>
               <p className="review-body">{r.content}</p>
               <small className="review-meta">
-                by {r.userName || "Anonymous"} on {new Date(r.createdOn).toLocaleDateString()}
+                by {r.userName || "Anonymous"} on{" "}
+                {new Date(r.createdOn).toLocaleDateString()}
               </small>
               <br />
               {/* Delete button for owner or Admin */}
-              {user && (user.userName === r.userName || roles.includes("Admin")) && (
-                <button style={{color:"red"}} onClick={() => handleDelete(r)}>
-                  Delete
-                </button>
+              {user && (user.id === r.userId || roles.includes("Admin")) && (
+                <button onClick={() => handleDelete(r)}>Delete</button>
               )}
             </li>
           ))}
         </ul>
 
-        {!reviewsLoading && (!reviewBucket || reviewBucket.items.length === 0) && (
-          <p className="empty-state">No reviews yet. Be the first!</p>
-        )}
+        {!reviewsLoading &&
+          (!reviewBucket || reviewBucket.items.length === 0) && (
+            <p className="empty-state">No reviews yet. Be the first!</p>
+          )}
       </section>
     </div>
   );

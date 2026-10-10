@@ -24,7 +24,7 @@ export const login = createAsyncThunk(
       const data = await loginRequest(username, password);
       // Persist session pieces for later reads.
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify({ userName: data.userName, email: data.email }));
+      localStorage.setItem("user", JSON.stringify({ id: data.id,userName: data.userName, email: data.email })); // Added data.id 10_10
       localStorage.setItem("roles", JSON.stringify(data.roles || []));
       return data; // Fulfilled payload
     } catch (err) {
@@ -79,7 +79,7 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;                // Hide spinner
-        state.user = { userName: action.payload.userName, email: action.payload.email };
+        state.user = { id: action.payload.id, userName: action.payload.userName, email: action.payload.email };
         state.token = action.payload.token;     // Save JWT
         state.roles = action.payload.roles || []; // Save roles
       })
@@ -94,7 +94,7 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = { userName: action.payload.userName, email: action.payload.email };
+        state.user = { id: action.payload.id, userName: action.payload.userName, email: action.payload.email };
         state.token = action.payload.token;
         state.roles = action.payload.roles || [];
       })

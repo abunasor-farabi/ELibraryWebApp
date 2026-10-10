@@ -66,12 +66,17 @@ export const updateReview = createAsyncThunk(
 // ---------- OPTIMISTIC delete ----------
 export const deleteReview = createAsyncThunk(
   "reviews/deleteReview",
-  async ({ id, bookId }, { rejectWithValue }) => {
+  async ({ id, bookId, review }, { rejectWithValue }) => {
     try {
       await deleteReviewRequest(id); // Real DELETE
       return { bookId, id }; // Return book + id
     } catch (err) {
-      return rejectWithValue(err.message || "Failed to delete review");
+      return rejectWithValue(
+        bookId,
+        id,
+        review,
+        err.message || "Failed to delete review",
+      );
     }
   },
 );
@@ -166,9 +171,18 @@ const reviewsSlice = createSlice({
       })
       // ---- OPTIMISTIC DELETE ----
       .addCase(deleteReview.rejected, (s, a) => {
-        s.error = a.payload || "Failed to delete review"; // Show server error
+        // s.error = a.payload || "Failed to delete review"; // Show server error
         // NOTE: to rollback a delete we'd need the removed item; the calling
         // component holds it and can dispatch an `optimisticAddReview` to restore.
+
+        const { bookId, id, review, message } = a.payload || {};
+        const bucket = s.byBookId[bookId];
+        if (bucket && review) {
+          // Put it back where it was — prepending is fine unless you need exact order.
+          bucket.items = [review, ...bucket.items.filter((r) => r.id !== id)];
+          bucket.totalCount += 1;
+        }
+        s.error = message || "Failed to delete review";
       });
   },
 });

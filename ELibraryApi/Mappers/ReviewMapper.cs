@@ -16,7 +16,8 @@ namespace ELibraryApi.Mappers
                 CreatedOn = r.CreatedOn,
                 UpdatedOn = r.UpdatedOn,
                 BookId = r.BookId,
-                UserName = r.AppUser?.UserName // Reviewer name if loaded
+                UserName = r.AppUser?.UserName, // Reviewer name if loaded
+                UserId = r.AppUserId,
             };
         }
 

@@ -62,6 +62,7 @@ namespace ELibraryApi.Controllers
             // Build response with signed token
             return Ok(new NewUserDto
             {
+                Id = appUser.Id, 
                 UserName = appUser.UserName!,       // Return username
                 Email = appUser.Email,          // Return email
                 Token = _tokenService.CreateToken(appUser, roles),  // Sign JWT
@@ -92,6 +93,7 @@ namespace ELibraryApi.Controllers
             // Return token
             return Ok(new NewUserDto
             {
+                Id = user.Id,
                 UserName = user.UserName!,      // Username
                 Email = user.Email!,    // Email
                 Token = _tokenService.CreateToken(user, roles), // JWT

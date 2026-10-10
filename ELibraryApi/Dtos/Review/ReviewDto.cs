@@ -10,5 +10,6 @@ namespace ELibraryApi.Dtos.Review
         public DateTime? UpdatedOn { get; set; }            // Updated at
         public int BookId { get; set; }                     // FK to Book
         public string? UserName { get; set; }               // Reviewer display name
+        public string? UserId { get; set; }
     }
 }

@@ -80,7 +80,7 @@ export default function BookDetailPage() {
     // Optimistically remove.
     dispatch(optimisticRemoveReview({ bookId, id: review.id }));
     // Fire the real thunk (rollback handled by user re-adding if needed).
-    dispatch(deleteReview({ id: review.id, bookId }));
+    dispatch(deleteReview({ id: review.id, bookId, review }));
   };
 
   if (bookLoading) return <Spinner label="Loading book..." />; // Spinner
